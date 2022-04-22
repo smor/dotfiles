@@ -3,5 +3,5 @@
 sudo apt --yes install autojump ripgrep fzf
 {{ else if eq .chezmoi.os "darwin" -}}
 #!/bin/sh
-brew install autojump ripgrep
+brew install autojump ripgrep fzf
 {{ end -}}
