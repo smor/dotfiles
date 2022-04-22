@@ -11,6 +11,8 @@ lg3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold b
 mr = push -o merge_request.create
 local-branches = "!git branch --format '%(refname:short) %(upstream:short)' | awk '{if (!$2) print $1;}'"
 
+c = clone
+
 [pull]
   ff = only
 
