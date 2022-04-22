@@ -11,6 +11,8 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'cespare/vim-toml'
 Plugin 'tpope/vim-fugitive'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
 call vundle#end()            " required
 
@@ -51,3 +53,8 @@ let g:molokai_original = 1
 
 " Remove all annoying sounds
 set belloff=all
+
+" Vim Airline configuration
+let g:airline_powerline_fonts=1
+let g:airline#extensions#tabline#enabled = 1
+
