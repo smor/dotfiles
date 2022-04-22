@@ -72,7 +72,7 @@ if [[ -f $ANTIGEN/antigen.zsh ]]; then
   antigen bundle zsh-users/zsh-completions src
   antigen bundle zsh-users/zsh-autosuggestions
   antigen bundle tetsujin/zsh-function-mysql
-  #antigen bundle autojump # Enables autojump if installed with homebrew
+  antigen bundle autojump # Enables autojump if installed with homebrew
   #antigen bundle ruby
   #antigen bundle rbenv
   #antigen bundle bundler
