@@ -1,7 +1,7 @@
 {{ if eq .chezmoi.os "linux" -}}
 #!/bin/sh
-sudo apt --yes install autojump ripgrep fzf
+sudo apt --yes install autojump ripgrep fzf bat
 {{ else if eq .chezmoi.os "darwin" -}}
 #!/bin/sh
-brew install autojump ripgrep fzf
+brew install autojump ripgrep fzf bat
 {{ end -}}

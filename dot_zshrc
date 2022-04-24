@@ -85,6 +85,9 @@ if [[ -f $ANTIGEN/antigen.zsh ]]; then
   #antigen bundle ant
   antigen bundle pip
 
+  # Add Alt-e to search files and edit them
+  antigen bundle leophys/zsh-plugin-fzf-finder
+
   antigen theme robbyrussell
 
   antigen apply
