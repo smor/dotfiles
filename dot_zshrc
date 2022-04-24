@@ -100,3 +100,7 @@ setopt NO_HIST_BEEP         # Don't beep on failed history lookups
 setopt NO_BEEP    # Do not beep on line editor errors
 setopt NO_LIST_BEEP       # Prevent beeping on ambiguous completion
 
+# Load local zshrc file if it exists
+if [ -f ~/.zshrc_local ]; then
+  source ~/.zshrc_local
+fi
