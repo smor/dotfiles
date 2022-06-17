@@ -4,7 +4,7 @@ sudo apt --yes install autojump fzf
 # Fix issue while installing bat and ripgrep at the same time
 sudo apt --yes install -o Dpkg::Options::="--force-overwrite" bat ripgrep
 # Diff-so-fancy
-sudo add-apt-repository ppa:aos1/diff-so-fancy
+sudo add-apt-repository ppa:aos1/diff-so-fancy -y
 sudo apt update
 sudo apt --yes install diff-so-fancy
 {{ else if eq .chezmoi.os "darwin" -}}
