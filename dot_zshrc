@@ -26,7 +26,7 @@ if [[ -f $ANTIGEN/antigen.zsh ]]; then
   fi
 
   antigen bundle git      # Enables the zsh completion from git
-  antigen bundle git-extras# Enables the zsh completion from git
+  antigen bundle git-extras # Enables the zsh completion from git
   antigen bundle git-flow # Support for git-flow completion
   #antigen bundle coffee   # Completion plugin for CoffeeScript.
   #antigen bundle cp       # ?
@@ -49,6 +49,7 @@ if [[ -f $ANTIGEN/antigen.zsh ]]; then
   #antigen bundle vundle  # vim vundle alias
   #antigen bundle mvn     # maven completion
   antigen bundle npm     # npm completion
+  antigen bundle akoenig/npm-run.plugin.zsh
   #antigen bundle bower   # bower completion
   #antigen bundle copydir # Mac clipborad copy current directory
   #antigen bundle copyfile    # Mac clipborad copy file
@@ -66,6 +67,7 @@ if [[ -f $ANTIGEN/antigen.zsh ]]; then
   antigen bundle command-not-found
   antigen bundle common-aliases # https://github.com/robbyrussell/oh-my-zsh/blob/master/plugins/common-aliases/common-aliases.plugin.zsh
 
+  antigen bundle mattberther/zsh-pyenv
   #antigen bundle sharat87/autoenv
   #antigen bundle zsh-users/zsh-syntax-highlighting
   #antigen bundle zsh-users/zsh-history-substring-search
