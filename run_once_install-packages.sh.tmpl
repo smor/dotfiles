@@ -9,5 +9,5 @@ sudo apt update
 sudo apt --yes install diff-so-fancy
 {{ else if eq .chezmoi.os "darwin" -}}
 #!/bin/sh
-brew install autojump ripgrep fzf bat
+brew install autojump ripgrep fzf bat diff-so-fancy
 {{ end -}}
