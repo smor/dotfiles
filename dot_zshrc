@@ -2,6 +2,7 @@
 # https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins#common-aliases
 # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins
 
+NVM_AUTO_USE=true
 ANTIGEN=$HOME/.antigen/
 # Antigen
 [ -f $ANTIGEN/antigen.zsh ] || git clone\
@@ -90,6 +91,8 @@ if [[ -f $ANTIGEN/antigen.zsh ]]; then
   # Add Alt-e to search files and edit them
   antigen bundle leophys/zsh-plugin-fzf-finder
 
+  # NVM
+  antigen bundle lukechilds/zsh-nvm
   antigen theme robbyrussell
 
   antigen apply
@@ -98,6 +101,22 @@ fi
 
 # cd ~
 
+################################################################
+# Set ZSH options
+################################################################
+#== History ================
+unsetopt share_history
+#setopt APPEND_HISTORY          # history appends to existing file
+#setopt HIST_FIND_NO_DUPS       # history search finds once only
+#setopt HIST_IGNORE_ALL_DUPS    # remove all earlier duplicate lines
+#setopt HIST_REDUCE_BLANKS      # trim multiple insgnificant blanks in history
+#setopt HIST_NO_STORE           # remove the history (fc -l) command from the history when invoked
+
+#HISTFILE=$HOME/.zsh/history    # history file location
+#HISTSIZE=1000000               # number of history lines kept internally
+#SAVEHIST=1000000               # max number of history lines saved
+
+#== Sound ================
 setopt NO_HIST_BEEP         # Don't beep on failed history lookups
 setopt NO_BEEP    # Do not beep on line editor errors
 setopt NO_LIST_BEEP       # Prevent beeping on ambiguous completion
