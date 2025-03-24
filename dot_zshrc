@@ -87,6 +87,10 @@ if [[ -f $ANTIGEN/antigen.zsh ]]; then
   antigen bundle node
   #antigen bundle ant
   antigen bundle pip
+  #
+  # Python, Conda
+  antigen bundle "bckim92/zsh-autoswitch-conda" # conda auto switch
+  antigen bundle esc/conda-zsh-completion
 
   # Add Alt-e to search files and edit them
   antigen bundle leophys/zsh-plugin-fzf-finder
