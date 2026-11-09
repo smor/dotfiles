@@ -25,6 +25,7 @@ fi
 
 # Plugins: antidote (cloned by chezmoi into ~/.antidote), list in ~/.zsh_plugins.txt
 is-linux() { [[ $OSTYPE == linux* ]] }   # used by `conditional:` in the plugin list
+is-macos() { [[ $OSTYPE == darwin* ]] }
 DISABLE_AUTO_TITLE=true                  # tab titles are set below, not by oh-my-zsh
 if [[ -f ~/.antidote/antidote.zsh ]]; then
   source ~/.antidote/antidote.zsh

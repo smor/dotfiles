@@ -1,5 +1,6 @@
-#!/bin/sh
 {{ if eq .chezmoi.os "linux" -}}
+#!/bin/sh
+# Linux packages (macOS uses ~/.Brewfile instead)
 sudo apt --yes install zoxide fzf
 # Fix issue while installing bat and ripgrep at the same time
 sudo apt --yes install -o Dpkg::Options::="--force-overwrite" bat ripgrep
@@ -7,15 +8,9 @@ sudo apt --yes install -o Dpkg::Options::="--force-overwrite" bat ripgrep
 sudo add-apt-repository ppa:aos1/diff-so-fancy -y
 sudo apt update
 sudo apt --yes install diff-so-fancy
-{{ else if eq .chezmoi.os "darwin" -}}
-brew install zoxide ripgrep fzf bat diff-so-fancy jq gh
-{{ end -}}
 
 # mise (node/python versions)
 if ! command -v mise >/dev/null 2>&1; then
-{{- if eq .chezmoi.os "darwin" }}
-  brew install mise
-{{- else }}
   curl -fsSL https://mise.run | sh
-{{- end }}
 fi
+{{ end -}}

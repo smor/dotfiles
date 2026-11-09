@@ -1,0 +1,7 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/sh
+# Runs after ~/.Brewfile is written, and again whenever it changes.
+# Brewfile hash: {{ include "dot_Brewfile" | sha256sum }}
+set -e
+brew bundle install --global --no-upgrade
+{{ end -}}

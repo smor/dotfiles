@@ -9,6 +9,9 @@ ohmyzsh/ohmyzsh path:lib            # oh-my-zsh defaults: history, completion, k
 ohmyzsh/ohmyzsh path:plugins/systemd conditional:is-linux
 ohmyzsh/ohmyzsh path:plugins/sudo conditional:is-linux     # [Esc][Esc] prefixes sudo
 
+# macOS only: cdf / ofd (Finder <-> shell), quick-look, man-preview, rmdsstore, ...
+ohmyzsh/ohmyzsh path:plugins/macos conditional:is-macos
+
 # oh-my-zsh plugins
 ohmyzsh/ohmyzsh path:plugins/git
 ohmyzsh/ohmyzsh path:plugins/dircycle         # Ctrl+Shift+Left/Right cycles the dir stack
