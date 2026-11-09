@@ -1,0 +1,29 @@
+# Ghostty config. Reload: Cmd-Shift-,   List options: ghostty +show-config --default --docs
+# Note: Ghostty has no inline comments; keep comments on their own lines.
+
+# Follows macOS light/dark mode
+theme = dark:Catppuccin Mocha,light:Catppuccin Latte
+font-size = 14
+
+# Windows, tabs, splits
+# Tabs live in the titlebar
+macos-titlebar-style = tabs
+# Restore windows/tabs/splits after restart
+window-save-state = always
+window-inherit-working-directory = true
+# Dim inactive splits so focus is obvious
+unfocused-split-opacity = 0.6
+
+# Left Option acts as Alt (fzf Alt-C, Alt-e file finder); right Option still types special chars
+macos-option-as-alt = left
+
+# Make Ghostty work properly over ssh (env vars + terminfo on remote hosts)
+shell-integration-features = ssh-env,ssh-terminfo
+
+# Quick terminal: drop-down from the top, from any app. The global keybind needs
+# Accessibility permission for Ghostty (System Settings > Privacy & Security).
+quick-terminal-position = top
+keybind = global:ctrl+grave_accent=toggle_quick_terminal
+
+# Rename the current tab
+keybind = cmd+shift+r=prompt_tab_title
