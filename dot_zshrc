@@ -98,8 +98,9 @@ if [[ -f $ANTIGEN/antigen.zsh ]]; then
   # Add Alt-e to search files and edit them
   antigen bundle leophys/zsh-plugin-fzf-finder
 
-  # Per directory history
-  #antigen bundle jimhester/per-directory-history
+  # Per directory history (Ctrl-G toggles global/directory history).
+  # Needs inc_append_history, see History options below.
+  antigen bundle per-directory-history
 
   # NVM
   antigen bundle lukechilds/zsh-nvm
@@ -143,7 +144,9 @@ pyenv() {
 # Set ZSH options
 ################################################################
 #== History ================
-unsetopt share_history
+unsetopt share_history         # keep each session's history separate...
+setopt inc_append_history      # ...but write lines immediately; per-directory-history
+                               # never writes its per-dir files without this
 #setopt APPEND_HISTORY          # history appends to existing file
 #setopt HIST_FIND_NO_DUPS       # history search finds once only
 #setopt HIST_IGNORE_ALL_DUPS    # remove all earlier duplicate lines
