@@ -3,7 +3,7 @@
 
 # Follows macOS light/dark mode
 theme = dark:Catppuccin Mocha,light:Catppuccin Latte
-font-size = 14
+font-size = 15
 
 # Windows, tabs, splits
 # Tabs live in the titlebar
