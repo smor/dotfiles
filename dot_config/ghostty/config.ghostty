@@ -2,7 +2,7 @@
 # Note: Ghostty has no inline comments; keep comments on their own lines.
 
 # Always dark, regardless of macOS appearance
-theme = Catppuccin Mocha
+theme = GitHub Dark High Contrast
 font-size = 15
 
 # Windows, tabs, splits
