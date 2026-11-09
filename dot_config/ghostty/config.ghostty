@@ -10,7 +10,11 @@ font-size = 15
 macos-titlebar-style = tabs
 # Restore windows/tabs/splits after restart
 window-save-state = always
-window-inherit-working-directory = true
+# New windows and tabs start in $HOME; splits keep the current folder
+working-directory = home
+window-inherit-working-directory = false
+tab-inherit-working-directory = false
+split-inherit-working-directory = true
 # Dim inactive splits so focus is obvious
 unfocused-split-opacity = 0.6
 
