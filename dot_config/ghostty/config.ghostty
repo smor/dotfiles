@@ -1,8 +1,8 @@
 # Ghostty config. Reload: Cmd-Shift-,   List options: ghostty +show-config --default --docs
 # Note: Ghostty has no inline comments; keep comments on their own lines.
 
-# Follows macOS light/dark mode
-theme = dark:Catppuccin Mocha,light:Catppuccin Latte
+# Always dark, regardless of macOS appearance
+theme = Catppuccin Mocha
 font-size = 15
 
 # Windows, tabs, splits
