@@ -4,6 +4,23 @@
 # .python-version (see ~/.config/mise/config.toml) and switches on cd.
 if (( $+commands[mise] )); then
   eval "$(mise activate zsh)"
+
+  # Announce version changes on cd, e.g. "node 24.21.0 → 22.15.0" (not at startup).
+  # Reads versions from mise's entries in $PATH, so it costs no subprocess.
+  typeset -gA _MISE_SEEN
+  _mise_announce() {
+    local tool v p msg=()
+    for tool in node python; do
+      p=${${(M)path:#*/mise/installs/$tool/*}[1]}
+      v=; [[ -n $p ]] && v=${${p:h:A}:t}   # .../installs/node/24/bin -> 24.21.0
+      if (( ${+_MISE_SEEN[$tool]} )) && [[ $v != ${_MISE_SEEN[$tool]} ]]; then
+        msg+="$tool ${_MISE_SEEN[$tool]:-system} → ${v:-system}"
+      fi
+      _MISE_SEEN[$tool]=$v
+    done
+    (( $#msg )) && print -P "%F{8}${(j:, :)msg}%f"
+  }
+  autoload -U add-zsh-hook && add-zsh-hook precmd _mise_announce
 fi
 
 # Plugins: antidote (cloned by chezmoi into ~/.antidote), list in ~/.zsh_plugins.txt
