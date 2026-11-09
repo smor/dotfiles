@@ -15,7 +15,7 @@ c = clone
 
 conflicts = diff --name-only --diff-filter=U --relative
 
-rm-untracked-branches = "!git branch --merged | grep -v 'master' | grep -v 'dev' >/tmp/merged-branches && vi /tmp/merged-branches && xargs git branch -d </tmp/merged-branches"
+rm-untracked-branches = "!f() { t=$(mktemp) && git branch --merged | grep -vE '^[*+]|^ *(main|master|dev|develop)$' > \"$t\"; ${EDITOR:-vi} \"$t\" && xargs git branch -d < \"$t\"; rm -f \"$t\"; }; f"
 
 [pull]
   ff = only

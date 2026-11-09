@@ -1,11 +1,3 @@
-[".local/bin/diffsofancy"]
-  type = "git-repo"
-  url = "https://github.com/so-fancy/diff-so-fancy"
-  executable = true
-  [".local/bin/diffsofancy".filter]
-    command = "ln"
-    args = ["-s", "$HOME/.local/bin/diffsofancy/diff-so-fancy", "$HOME/.local/bin/diff-so-fancy"]
-
 [".vim/bundle/Vundle.vim"]
   type = "git-repo"
   url = "https://github.com/VundleVim/Vundle.vim.git"
