@@ -33,5 +33,4 @@ bckim92/zsh-autoswitch-conda
 leophys/zsh-plugin-fzf-finder       # Alt-e: find a file and edit it
 zsh-users/zsh-autosuggestions
 
-# Theme
-ohmyzsh/ohmyzsh path:themes/robbyrussell.zsh-theme
+# Prompt: starship (see ~/.zshrc and ~/.config/starship.toml)

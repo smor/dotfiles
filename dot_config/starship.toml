@@ -1,0 +1,49 @@
+# Starship prompt (https://starship.rs/config/). Two lines: context, then input.
+# Only the modules listed in `format` are evaluated, which keeps the prompt fast.
+"$schema" = "https://starship.rs/config-schema.json"
+
+add_newline = true
+format = """
+$hostname$directory$git_branch$git_state$git_status$nodejs$python$conda$cmd_duration
+$character"""
+
+# Path: inside a git repo, shown from the repo root; elsewhere, last 3 folders
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+style = "bold cyan"
+
+# Long branch names are cut at 25 characters
+[git_branch]
+truncation_length = 25
+truncation_symbol = "…"
+style = "bold purple"
+
+# ! modified  + staged  ? untracked  ⇡ ahead  ⇣ behind  = conflict  $ stash
+[git_status]
+format = "([$all_status$ahead_behind]($style) )"
+style = "bold red"
+
+# Versions only appear inside projects (package.json/.nvmrc, .py/.python-version, ...)
+[nodejs]
+version_format = "${raw}"
+[python]
+symbol = " "
+version_format = "${raw}"
+format = "via [${symbol}${version}( \\($virtualenv\\))]($style) "
+[conda]
+ignore_base = true
+
+# Shown when a command took longer than 3s
+[cmd_duration]
+min_time = 3000
+format = "took [$duration]($style) "
+
+# ssh only
+[hostname]
+ssh_only = true
+format = "[$hostname]($style) "
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"

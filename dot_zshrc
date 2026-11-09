@@ -32,6 +32,13 @@ if [[ -f ~/.antidote/antidote.zsh ]]; then
   antidote load
 fi
 
+# Prompt: starship (~/.config/starship.toml); plain fallback if it's missing
+if (( $+commands[starship] )); then
+  eval "$(starship init zsh)"
+else
+  PROMPT='%~ %# '
+fi
+
 # fzf: Ctrl-R fuzzy history (respects per-directory history), Ctrl-T insert path,
 # Alt-C cd into a subdirectory. Needs fzf >= 0.48.
 if (( $+commands[fzf] )) && [[ -z $ZSH_EXECUTION_STRING ]]; then  # skip for `zsh -c`
