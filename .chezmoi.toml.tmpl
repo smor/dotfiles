@@ -1,0 +1,7 @@
+{{- /* Asked once per machine by `chezmoi init`; answers are stored in
+       ~/.config/chezmoi/chezmoi.toml, which is never committed. */ -}}
+{{- $name := promptStringOnce . "name" "Git name" -}}
+{{- $email := promptStringOnce . "email" "Git email" -}}
+[data]
+  name = {{ $name | quote }}
+  email = {{ $email | quote }}
