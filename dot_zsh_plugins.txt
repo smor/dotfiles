@@ -29,7 +29,6 @@ jimhester/per-directory-history      # Ctrl-G toggles; needs inc_append_history.
 
 # Third-party plugins
 zsh-users/zsh-completions path:src kind:fpath
-akoenig/npm-run.plugin.zsh
 bckim92/zsh-autoswitch-conda
 leophys/zsh-plugin-fzf-finder       # Alt-e: find a file and edit it
 zsh-users/zsh-autosuggestions
