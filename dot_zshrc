@@ -68,6 +68,13 @@ add-zsh-hook precmd _tab_title_precmd
 add-zsh-hook preexec _tab_title_preexec
 _tab_title_project
 
+# zoxide: smarter cd. `z foo` (or `j foo`) jumps to the best match for "foo",
+# `zi` (or `ji`) picks interactively with fzf; `z foo<Space><Tab>` lists matches.
+if (( $+commands[zoxide] )); then
+  eval "$(zoxide init zsh)"
+  alias j=z ji=zi
+fi
+
 #== History ================
 unsetopt share_history         # keep each session's history separate...
 setopt inc_append_history      # ...but write lines immediately; per-directory-history

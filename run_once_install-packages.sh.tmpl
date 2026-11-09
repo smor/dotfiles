@@ -1,6 +1,6 @@
 #!/bin/sh
 {{ if eq .chezmoi.os "linux" -}}
-sudo apt --yes install autojump fzf
+sudo apt --yes install zoxide fzf
 # Fix issue while installing bat and ripgrep at the same time
 sudo apt --yes install -o Dpkg::Options::="--force-overwrite" bat ripgrep
 # Diff-so-fancy
@@ -8,7 +8,7 @@ sudo add-apt-repository ppa:aos1/diff-so-fancy -y
 sudo apt update
 sudo apt --yes install diff-so-fancy
 {{ else if eq .chezmoi.os "darwin" -}}
-brew install autojump ripgrep fzf bat diff-so-fancy jq gh
+brew install zoxide ripgrep fzf bat diff-so-fancy jq gh
 {{ end -}}
 
 # mise (node/python versions)
