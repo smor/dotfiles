@@ -3,6 +3,9 @@
 "$schema" = "https://starship.rs/config-schema.json"
 
 add_newline = true
+# Max wait for version commands like `node --version` (default 500ms). They
+# normally take ~20ms, but can exceed 500ms when the Mac is under heavy load.
+command_timeout = 2000
 format = """
 $hostname$directory$git_branch$git_state$git_status$nodejs$python$conda$cmd_duration
 $character"""
