@@ -1,12 +1,11 @@
 export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
+# Equivalent of `eval "$(pyenv init --path)"` without spawning pyenv
+export PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 
 # chezmoi is installed in ~/bin
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
-eval "$(pyenv init --path)"
 
 export RIPGREP_CONFIG_PATH=~/.ripgreprc
 
+# nvm is lazy-loaded from .zshrc (zsh-nvm with NVM_LAZY_LOAD)
 export NVM_DIR="$HOME/.nvm"
-  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion

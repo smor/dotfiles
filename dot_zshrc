@@ -2,7 +2,10 @@
 # https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins#common-aliases
 # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins
 
-NVM_AUTO_USE=true
+# NVM: lazy-load (eager loading + auto-use cost ~2s per shell).
+# Auto-switching on .nvmrc is handled by _nvm_auto_use_lazy below.
+export NVM_DIR="$HOME/.nvm"
+NVM_LAZY_LOAD=true
 ANTIGEN=$HOME/.antigen/
 # Antigen
 [ -f $ANTIGEN/antigen.zsh ] || git clone\
@@ -35,7 +38,7 @@ if [[ -f $ANTIGEN/antigen.zsh ]]; then
   antigen bundle gnu-utils
   antigen bundle history
   antigen bundle aws
-  antigen bundle docker
+  #antigen bundle docker
   antigen bundle autopep8
   antigen bundle colorize # ccat command
   #antigen bundle common-aliases # https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins#common-aliases
@@ -55,7 +58,7 @@ if [[ -f $ANTIGEN/antigen.zsh ]]; then
   #antigen bundle copydir # Mac clipborad copy current directory
   #antigen bundle copyfile    # Mac clipborad copy file
   antigen bundle dirpersist  # Make the dirstack more persistant for .zlogout
-  #antigen bundle docker      # Docker autocompletion
+  antigen bundle docker      # Docker autocompletion
   #antigen bundle emoji-clock # emoji-clock command
   antigen bundle fasd        # [v] [o] short hand command
   #antigen bundle nyan        # telnet nayncat!
@@ -68,7 +71,7 @@ if [[ -f $ANTIGEN/antigen.zsh ]]; then
   antigen bundle command-not-found
   antigen bundle common-aliases # https://github.com/robbyrussell/oh-my-zsh/blob/master/plugins/common-aliases/common-aliases.plugin.zsh
 
-  antigen bundle mattberther/zsh-pyenv
+  # pyenv is lazy-loaded below (zsh-pyenv plugin cost ~0.5s)
   #antigen bundle sharat87/autoenv
   #antigen bundle zsh-users/zsh-syntax-highlighting
   #antigen bundle zsh-users/zsh-history-substring-search
@@ -90,10 +93,13 @@ if [[ -f $ANTIGEN/antigen.zsh ]]; then
   #
   # Python, Conda
   antigen bundle "bckim92/zsh-autoswitch-conda" # conda auto switch
-  antigen bundle esc/conda-zsh-completion
+  antigen bundle "esc/conda-zsh-completion"
 
   # Add Alt-e to search files and edit them
   antigen bundle leophys/zsh-plugin-fzf-finder
+
+  # Per directory history
+  #antigen bundle jimhester/per-directory-history
 
   # NVM
   antigen bundle lukechilds/zsh-nvm
@@ -102,6 +108,34 @@ if [[ -f $ANTIGEN/antigen.zsh ]]; then
   antigen apply
   #unalias rm
 fi
+
+# Default node on PATH immediately, so node scripts work before nvm is loaded
+_nvm_default_bin=( $NVM_DIR/versions/node/v$(<$NVM_DIR/alias/default 2>/dev/null)*(NnOn[1]) )
+[[ -n $_nvm_default_bin ]] && export PATH="$_nvm_default_bin/bin:$PATH"
+unset _nvm_default_bin
+
+# Auto-use .nvmrc; only loads nvm when a project actually has one
+autoload -U add-zsh-hook
+_nvm_auto_use_lazy() {
+  local d=$PWD
+  while [[ $d != / && ! -f $d/.nvmrc ]]; do d=${d:h}; done
+  if [[ -f $d/.nvmrc ]]; then
+    nvm use 2>/dev/null || nvm install
+    _NVM_AUTO_SWITCHED=1
+  elif [[ -n $_NVM_AUTO_SWITCHED ]]; then
+    nvm use default
+    unset _NVM_AUTO_SWITCHED
+  fi
+}
+add-zsh-hook chpwd _nvm_auto_use_lazy
+_nvm_auto_use_lazy
+
+# pyenv: shims are on PATH (see .zprofile); load the full shell integration on first use
+pyenv() {
+  unfunction pyenv
+  eval "$(command pyenv init - --no-rehash zsh)"
+  pyenv "$@"
+}
 
 # cd ~
 
