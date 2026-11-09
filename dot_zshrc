@@ -1,113 +1,50 @@
 #!/bin/zsh
-# https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins#common-aliases
-# https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins
 
 # NVM: lazy-load (eager loading + auto-use cost ~2s per shell).
 # Auto-switching on .nvmrc is handled by _nvm_auto_use_lazy below.
 export NVM_DIR="$HOME/.nvm"
 NVM_LAZY_LOAD=true
-ANTIGEN=$HOME/.antigen/
+
 # Antigen
+ANTIGEN=$HOME/.antigen/
 [ -f $ANTIGEN/antigen.zsh ] || git clone\
   https://github.com/zsh-users/antigen.git $ANTIGEN
 if [[ -f $ANTIGEN/antigen.zsh ]]; then
   source $ANTIGEN/antigen.zsh
   antigen use oh-my-zsh
 
-  # antigen update
-  # antigen selfupdate
-  #
-  if [[ "$OSTYPE" == "darwin16.0" ]]; then
-    antigen bundle macos
-    antigen bundle ssh-agent
-    antigen bundle vscode
-    antigen bundle terminalapp # Set Apple Terminal.app resume directory
-    antigen bundle brew     # adds completion for the brew command
-  fi
-  if [[ "$OSTYPE" == "linux-gnu" ]]; then
+  if [[ "$OSTYPE" == linux* ]]; then
     antigen bundle systemd
-    antigen bundle sudo        # Defined shortcut keys: [Esc] [Esc]
+    antigen bundle sudo        # [Esc] [Esc] prefixes the command with sudo
   fi
 
-  antigen bundle git      # Enables the zsh completion from git
-  antigen bundle git-extras # Enables the zsh completion from git
-  antigen bundle git-flow # Support for git-flow completion
-  #antigen bundle coffee   # Completion plugin for CoffeeScript.
-  #antigen bundle cp       # ?
-  antigen bundle dircycle # This is a small zle trick that lets you cycle your directory stack left or right using Ctrl+Shift+Left/Right
-  antigen bundle gnu-utils
+  # oh-my-zsh plugins
+  antigen bundle git
+  antigen bundle dircycle      # Ctrl+Shift+Left/Right cycles the directory stack
   antigen bundle history
-  antigen bundle aws
-  #antigen bundle docker
-  antigen bundle autopep8
-  antigen bundle colorize # ccat command
-  #antigen bundle common-aliases # https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins#common-aliases
-  #antigen bundle history-substring-search # Press the UP/DOWN arrow key to select the nearest command 
-  #antigen bundle iwhois # iwhois servers using CNAMES via whois.geek.nz
-#   To enable agent forwarding support add the following to
-#   your .zshrc file:
-#
-#     zstyle :omz:plugins:ssh-agent agent-forwarding on
-  #antigen bundle ssh-agent
-  #antigen bundle vagrant # vagrant zsh completion
-  #antigen bundle vundle  # vim vundle alias
-  #antigen bundle mvn     # maven completion
-  antigen bundle npm     # npm completion
-  antigen bundle akoenig/npm-run.plugin.zsh
-  #antigen bundle bower   # bower completion
-  #antigen bundle copydir # Mac clipborad copy current directory
-  #antigen bundle copyfile    # Mac clipborad copy file
-  antigen bundle dirpersist  # Make the dirstack more persistant for .zlogout
-  antigen bundle docker      # Docker autocompletion
-  #antigen bundle emoji-clock # emoji-clock command
-  antigen bundle fasd        # [v] [o] short hand command
-  #antigen bundle nyan        # telnet nayncat!
-  #antigen bundle systemadmin # aliases psmem hist10
-  antigen bundle python      # aliase only?
-  #antigen bundle urltools    # urlencode
-  #antigen bundle xcode       # 
-  antigen bundle profiles    # custom profile for the local machine and each domain
-  #antigen bundle z           # z command
-  antigen bundle command-not-found
-  antigen bundle common-aliases # https://github.com/robbyrussell/oh-my-zsh/blob/master/plugins/common-aliases/common-aliases.plugin.zsh
-
-  # pyenv is lazy-loaded below (zsh-pyenv plugin cost ~0.5s)
-  #antigen bundle sharat87/autoenv
-  #antigen bundle zsh-users/zsh-syntax-highlighting
-  #antigen bundle zsh-users/zsh-history-substring-search
-  antigen bundle zsh-users/zsh-completions src
-  antigen bundle zsh-users/zsh-autosuggestions
-  antigen bundle tetsujin/zsh-function-mysql
-  antigen bundle autojump # Enables autojump if installed with homebrew
-  #antigen bundle ruby
-  #antigen bundle rbenv
-  #antigen bundle bundler
-  #antigen bundle gem
-  #antigen bundle github
-  #antigen bundle mercurial
-  #antigen bundle virtualenv
-  #antigen bundle vi-mode
+  antigen bundle docker
+  antigen bundle npm
   antigen bundle node
-  #antigen bundle ant
   antigen bundle pip
-  #
-  # Python, Conda
-  antigen bundle "bckim92/zsh-autoswitch-conda" # conda auto switch
-  antigen bundle "esc/conda-zsh-completion"
-
-  # Add Alt-e to search files and edit them
-  antigen bundle leophys/zsh-plugin-fzf-finder
-
+  antigen bundle python
+  antigen bundle dirpersist    # persist the directory stack across sessions
+  antigen bundle autojump      # j <dir>; needs `brew install autojump`
+  antigen bundle command-not-found
+  antigen bundle common-aliases
   # Per directory history (Ctrl-G toggles global/directory history).
   # Needs inc_append_history, see History options below.
   antigen bundle per-directory-history
 
-  # NVM
+  # Third-party plugins
+  antigen bundle zsh-users/zsh-completions src
+  antigen bundle zsh-users/zsh-autosuggestions
+  antigen bundle akoenig/npm-run.plugin.zsh
+  antigen bundle bckim92/zsh-autoswitch-conda
+  antigen bundle leophys/zsh-plugin-fzf-finder  # Alt-e: find a file and edit it
   antigen bundle lukechilds/zsh-nvm
-  antigen theme robbyrussell
 
+  antigen theme robbyrussell
   antigen apply
-  #unalias rm
 fi
 
 # Default node on PATH immediately, so node scripts work before nvm is loaded
@@ -138,29 +75,15 @@ pyenv() {
   pyenv "$@"
 }
 
-# cd ~
-
-################################################################
-# Set ZSH options
-################################################################
 #== History ================
 unsetopt share_history         # keep each session's history separate...
 setopt inc_append_history      # ...but write lines immediately; per-directory-history
                                # never writes its per-dir files without this
-#setopt APPEND_HISTORY          # history appends to existing file
-#setopt HIST_FIND_NO_DUPS       # history search finds once only
-#setopt HIST_IGNORE_ALL_DUPS    # remove all earlier duplicate lines
-#setopt HIST_REDUCE_BLANKS      # trim multiple insgnificant blanks in history
-#setopt HIST_NO_STORE           # remove the history (fc -l) command from the history when invoked
 
-#HISTFILE=$HOME/.zsh/history    # history file location
-#HISTSIZE=1000000               # number of history lines kept internally
-#SAVEHIST=1000000               # max number of history lines saved
-
-#== Sound ================
-setopt NO_HIST_BEEP         # Don't beep on failed history lookups
-setopt NO_BEEP    # Do not beep on line editor errors
-setopt NO_LIST_BEEP       # Prevent beeping on ambiguous completion
+#== Sound ==================
+setopt NO_HIST_BEEP            # Don't beep on failed history lookups
+setopt NO_BEEP                 # Do not beep on line editor errors
+setopt NO_LIST_BEEP            # Prevent beeping on ambiguous completion
 
 # Load local zshrc file if it exists
 if [ -f ~/.zshrc_local ]; then
