@@ -1,0 +1,11 @@
+# mise: manages node and python versions (replaces nvm and pyenv).
+# Projects pick versions with .nvmrc / .python-version (read below) or a mise.toml.
+# Useful: `mise ls`, `mise use node@22` (in a project), `mise install`, `mise upgrade`.
+
+[tools]
+node = "24"
+# No global python: outside projects, python3 is Homebrew's.
+
+[settings]
+# Read the version files used by nvm and pyenv
+idiomatic_version_file_enable_tools = ["node", "python"]
