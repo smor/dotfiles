@@ -30,7 +30,6 @@ zsh-users/zsh-completions path:src kind:fpath
 akoenig/npm-run.plugin.zsh
 bckim92/zsh-autoswitch-conda
 leophys/zsh-plugin-fzf-finder       # Alt-e: find a file and edit it
-lukechilds/zsh-nvm
 zsh-users/zsh-autosuggestions
 
 # Theme

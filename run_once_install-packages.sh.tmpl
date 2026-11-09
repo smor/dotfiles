@@ -1,5 +1,5 @@
-{{ if eq .chezmoi.os "linux" -}}
 #!/bin/sh
+{{ if eq .chezmoi.os "linux" -}}
 sudo apt --yes install autojump fzf
 # Fix issue while installing bat and ripgrep at the same time
 sudo apt --yes install -o Dpkg::Options::="--force-overwrite" bat ripgrep
@@ -8,6 +8,12 @@ sudo add-apt-repository ppa:aos1/diff-so-fancy -y
 sudo apt update
 sudo apt --yes install diff-so-fancy
 {{ else if eq .chezmoi.os "darwin" -}}
-#!/bin/sh
 brew install autojump ripgrep fzf bat diff-so-fancy jq gh
 {{ end -}}
+
+# nvm: checkout of the latest release tag; ~/.zshrc loads it on first use.
+# Update later with: git -C ~/.nvm fetch --tags && git -C ~/.nvm checkout <tag>
+if [ ! -d "$HOME/.nvm" ]; then
+  git clone https://github.com/nvm-sh/nvm.git "$HOME/.nvm" &&
+    git -C "$HOME/.nvm" checkout -q "$(git -C "$HOME/.nvm" describe --abbrev=0 --tags --match 'v[0-9]*' "$(git -C "$HOME/.nvm" rev-list --tags --max-count=1)")"
+fi

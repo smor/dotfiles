@@ -7,5 +7,5 @@ export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 
 export RIPGREP_CONFIG_PATH=~/.ripgreprc
 
-# nvm is lazy-loaded from .zshrc (zsh-nvm with NVM_LAZY_LOAD)
+# nvm is loaded on first use from .zshrc
 export NVM_DIR="$HOME/.nvm"
