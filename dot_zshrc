@@ -5,46 +5,11 @@
 export NVM_DIR="$HOME/.nvm"
 NVM_LAZY_LOAD=true
 
-# Antigen
-ANTIGEN=$HOME/.antigen/
-[ -f $ANTIGEN/antigen.zsh ] || git clone\
-  https://github.com/zsh-users/antigen.git $ANTIGEN
-if [[ -f $ANTIGEN/antigen.zsh ]]; then
-  source $ANTIGEN/antigen.zsh
-  antigen use oh-my-zsh
-
-  if [[ "$OSTYPE" == linux* ]]; then
-    antigen bundle systemd
-    antigen bundle sudo        # [Esc] [Esc] prefixes the command with sudo
-  fi
-
-  # oh-my-zsh plugins
-  antigen bundle git
-  antigen bundle dircycle      # Ctrl+Shift+Left/Right cycles the directory stack
-  antigen bundle history
-  antigen bundle docker
-  antigen bundle npm
-  antigen bundle node
-  antigen bundle pip
-  antigen bundle python
-  antigen bundle dirpersist    # persist the directory stack across sessions
-  antigen bundle autojump      # j <dir>; needs `brew install autojump`
-  antigen bundle command-not-found
-  antigen bundle common-aliases
-  # Per directory history (Ctrl-G toggles global/directory history).
-  # Needs inc_append_history, see History options below.
-  antigen bundle per-directory-history
-
-  # Third-party plugins
-  antigen bundle zsh-users/zsh-completions src
-  antigen bundle zsh-users/zsh-autosuggestions
-  antigen bundle akoenig/npm-run.plugin.zsh
-  antigen bundle bckim92/zsh-autoswitch-conda
-  antigen bundle leophys/zsh-plugin-fzf-finder  # Alt-e: find a file and edit it
-  antigen bundle lukechilds/zsh-nvm
-
-  antigen theme robbyrussell
-  antigen apply
+# Plugins: antidote (cloned by chezmoi into ~/.antidote), list in ~/.zsh_plugins.txt
+is-linux() { [[ $OSTYPE == linux* ]] }   # used by `conditional:` in the plugin list
+if [[ -f ~/.antidote/antidote.zsh ]]; then
+  source ~/.antidote/antidote.zsh
+  antidote load
 fi
 
 # Default node on PATH immediately, so node scripts work before nvm is loaded
