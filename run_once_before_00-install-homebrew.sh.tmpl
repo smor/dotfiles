@@ -1,0 +1,11 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# New Mac: install Homebrew before anything else. Its installer also installs the
+# Xcode Command Line Tools (git, compilers), which chezmoi needs to clone antidote.
+# Asks for your password once; needs an admin account.
+set -e
+if [ ! -x /opt/homebrew/bin/brew ] && [ ! -x /usr/local/bin/brew ]; then
+  echo "Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+{{ end -}}

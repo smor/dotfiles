@@ -3,9 +3,8 @@
 #   Add a package:     add a line here, then `chezmoi apply`
 #   Check what's missing:            brew bundle check --global
 #   Installed but not listed here:   brew bundle cleanup --global   (dry run)
-# Apps installed by hand (Ghostty, Docker, Cursor, VS Code, ...) aren't listed:
-# brew would try to reinstall them. To hand one over to brew:
-#   brew install --cask --adopt <name>   then add `cask "<name>"` here.
+# Apps: see the "Apps" section at the end. Not listed: App Store apps, and apps
+# managed by work IT (Office, Teams, OneDrive, Defender, Company Portal, GlobalProtect).
 
 # Shell & terminal
 brew "zoxide"          # smarter cd (z / zi)
@@ -32,7 +31,6 @@ brew "powershell"
 brew "cloudflared"     # Cloudflare Tunnel
 brew "dvc"             # data version control
 brew "cmake"
-cask "azure-cli"
 
 # Documents, media, PDF
 brew "typst"           # typesetting
@@ -49,3 +47,44 @@ brew "gettext"
 brew "texinfo"
 brew "libmagic"
 brew "mono-libgdiplus"
+
+# Command-line casks
+cask "azure-cli"
+
+# Apps managed by Homebrew (they still update themselves)
+cask "alt-tab"             # window switcher
+cask "claude"
+cask "cursor"
+cask "discord"
+cask "ghostty"
+cask "handbrake-app"
+cask "lm-studio"
+cask "notion"
+cask "obsidian"
+cask "postman"
+cask "raycast"
+cask "slack"
+cask "stats"               # menu-bar system monitor
+cask "visual-studio-code"
+cask "vlc"
+cask "whatsapp"
+
+# Apps installed by hand on this Mac that Homebrew couldn't take over (version
+# mismatch, or needs sudo). Installed by brew only where the app is missing,
+# e.g. on a new Mac. (A Brewfile is Ruby, hence the `unless`.)
+def app?(name)
+  File.exist?("/Applications/#{name}.app")
+end
+cask "google-chrome"    unless app?("Google Chrome")
+cask "docker-desktop"   unless app?("Docker")
+cask "telegram-desktop" unless app?("Telegram")
+cask "blender"          unless app?("Blender")
+cask "calibre"          unless app?("calibre")
+cask "freecad"          unless app?("FreeCAD")
+cask "gimp"             unless app?("GIMP")
+cask "inkscape"         unless app?("Inkscape")
+cask "krita"            unless app?("krita")
+cask "onyx"             unless app?("OnyX")
+cask "pgadmin4"         unless app?("pgAdmin 4")
+cask "qgis"             unless app?("QGIS")
+cask "via"              unless app?("VIA")

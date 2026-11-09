@@ -1,0 +1,6 @@
+#!/bin/sh
+# Installs vim plugins listed in ~/.vimrc (vim-plug), when ~/.vimrc changes.
+# vimrc hash: {{ include "dot_vimrc" | sha256sum }}
+if [ -f "$HOME/.vim/autoload/plug.vim" ] && command -v vim >/dev/null 2>&1; then
+  vim -E -s -u "$HOME/.vimrc" +PlugInstall +qall </dev/null || true
+fi

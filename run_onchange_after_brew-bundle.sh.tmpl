@@ -1,7 +1,12 @@
 {{ if eq .chezmoi.os "darwin" -}}
 #!/bin/sh
+# Installs what ~/.Brewfile lists that's missing; never upgrades.
 # Runs after ~/.Brewfile is written, and again whenever it changes.
 # Brewfile hash: {{ include "dot_Brewfile" | sha256sum }}
 set -e
+# On a new Mac, brew isn't on PATH yet in this shell
+for p in /opt/homebrew/bin /usr/local/bin; do
+  [ -x "$p/brew" ] && PATH="$p:$PATH" && break
+done
 brew bundle install --global --no-upgrade
 {{ end -}}

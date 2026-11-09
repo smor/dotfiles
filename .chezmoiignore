@@ -1,2 +1,3 @@
-# Repo bootstrap script, not a dotfile
+# Repo files, not dotfiles
 install.sh
+README.md
