@@ -15,6 +15,7 @@ nvm() {
 
 # Plugins: antidote (cloned by chezmoi into ~/.antidote), list in ~/.zsh_plugins.txt
 is-linux() { [[ $OSTYPE == linux* ]] }   # used by `conditional:` in the plugin list
+DISABLE_AUTO_TITLE=true                  # tab titles are set below, not by oh-my-zsh
 if [[ -f ~/.antidote/antidote.zsh ]]; then
   source ~/.antidote/antidote.zsh
   antidote load
@@ -25,6 +26,37 @@ fi
 if (( $+commands[fzf] )) && [[ -z $ZSH_EXECUTION_STRING ]]; then  # skip for `zsh -c`
   source <(fzf --zsh)
 fi
+
+# Tab titles: "project" at the prompt, "project · command" while it runs,
+# prefixed with the host over ssh. Project = git repo name, else the folder name.
+# (Ghostty's own title feature is turned off in its config so they don't fight.)
+autoload -U add-zsh-hook
+_tab_title_project() {
+  local d=$PWD
+  while [[ $d != / && ! -e $d/.git ]]; do d=${d:h}; done
+  if [[ -e $d/.git && $d != $HOME ]]; then
+    _TAB_TITLE_PROJECT=${d:t}
+  elif [[ $PWD == $HOME ]]; then
+    _TAB_TITLE_PROJECT='~'
+  else
+    _TAB_TITLE_PROJECT=${PWD:t}
+  fi
+  [[ -n $SSH_CONNECTION ]] && _TAB_TITLE_PROJECT="${HOST%%.*}: $_TAB_TITLE_PROJECT"
+}
+_tab_title_set() {
+  [[ $TERM == dumb ]] && return
+  print -rn -- $'\e]2;'"${1//[[:cntrl:]]/}"$'\a'
+}
+_tab_title_precmd() { _tab_title_set "$_TAB_TITLE_PROJECT" }
+_tab_title_preexec() {
+  local cmd=${${1//$'\n'/ }## #}
+  (( ${#cmd} > 40 )) && cmd="${cmd[1,39]}…"
+  _tab_title_set "$_TAB_TITLE_PROJECT · $cmd"
+}
+add-zsh-hook chpwd _tab_title_project
+add-zsh-hook precmd _tab_title_precmd
+add-zsh-hook preexec _tab_title_preexec
+_tab_title_project
 
 # Default node on PATH immediately, so node scripts work before nvm is loaded
 _nvm_default_bin=( $NVM_DIR/versions/node/v$(<$NVM_DIR/alias/default 2>/dev/null)*(NnOn[1]) )

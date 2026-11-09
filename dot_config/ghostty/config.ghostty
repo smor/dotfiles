@@ -17,8 +17,8 @@ unfocused-split-opacity = 0.6
 # Left Option acts as Alt (fzf Alt-C, Alt-e file finder); right Option still types special chars
 macos-option-as-alt = left
 
-# Make Ghostty work properly over ssh (env vars + terminfo on remote hosts)
-shell-integration-features = ssh-env,ssh-terminfo
+# ssh: pass env vars + install terminfo on remote hosts. no-title: zsh sets tab titles itself (see ~/.zshrc)
+shell-integration-features = no-title,ssh-env,ssh-terminfo
 
 # Quick terminal: drop-down from the top, from any app. The global keybind needs
 # Accessibility permission for Ghostty (System Settings > Privacy & Security).
