@@ -1,0 +1,5 @@
+# GitHub over port 443 (ssh.github.com): some networks block SSH on port 22.
+Host github.com
+  HostName ssh.github.com
+  Port 443
+  User git
