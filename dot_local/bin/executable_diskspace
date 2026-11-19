@@ -1,0 +1,105 @@
+#!/bin/zsh
+# diskspace: see what eats disk space and memory, and free some without rebooting.
+#   diskspace          report: free space, swap, top memory users, Docker, caches
+#   diskspace clean    offer safe cleanups one by one (asks before each)
+#   diskspace watch    run by launchd every 5 min: notify when free space is low
+#
+# Why disk space comes back on reboot: it's mostly swap. When programs need more
+# than the 16 GB of RAM, macOS writes the overflow to disk and only deletes those
+# files once memory frees up. Quitting big memory users (see the report) gives the
+# space back within minutes; no reboot needed.
+
+WARN_GB=${DISKSPACE_WARN_GB:-20}    # notification below this
+CRIT_GB=${DISKSPACE_CRIT_GB:-12}    # urgent notification (displays fail around 10 GB)
+
+free_gb() { df -k /System/Volumes/Data | awk 'NR==2 {printf "%d", $4/1048576}' }
+swap_gb() { sysctl -n vm.swapusage | awk '{gsub("M","",$6); printf "%.1f", $6/1024}' }
+size_of() { [[ -e $1 ]] && du -sh "$1" 2>/dev/null | cut -f1 }
+docker_up() { (( $+commands[docker] )) && docker info >/dev/null 2>&1 }
+
+report() {
+  local free=$(free_gb) swap=$(swap_gb)
+  print -P "%BFree disk:%b ${free} GB    %BSwap on disk:%b ${swap} GB (given back as memory frees up)"
+  (( free < CRIT_GB )) && print -P "%F{red}Critically low: quit big memory users below, then run: diskspace clean%f"
+
+  print -P "\n%BBiggest memory users%b (quitting these shrinks swap):"
+  top -l 1 -o mem -n 10 -stats mem,command 2>/dev/null | sed -n '/^MEM/,$p' | tail -n +2 |
+    sed 's/com\.apple\.Virtua[^ ]* */Docker VM       /' | sed 's/^/  /'
+
+  if docker_up; then
+    print -P "\n%BDocker containers by memory%b (stop unneeded ones: docker stop NAME):"
+    docker stats --no-stream --format '{{.MemUsage}}\t{{.Name}}' 2>/dev/null |
+      sort -hr | head -6 | awk -F'\t' '{split($1,a," / "); printf "  %-10s %s\n", a[1], $2}'
+    print -P "\n%BDocker disk%b:"
+    docker system df 2>/dev/null | sed 's/^/  /'
+  fi
+
+  print -P "\n%BCaches%b:"
+  local d
+  for d in ~/Library/Caches/Homebrew ~/.npm ~/.cache/uv ~/Library/Caches/pnpm \
+           ~/Library/Caches/com.microsoft.VSCode.ShipIt ~/Library/Caches/notion.id.ShipIt \
+           ~/Library/Caches/notion-updater ~/.claude/projects; do
+    [[ -e $d ]] && printf "  %-6s %s\n" "$(size_of $d)" "${d/#$HOME/~}"
+  done
+}
+
+confirm() { read -q "?$1 [y/N] " && { echo; return 0 }; echo; return 1 }
+
+clean() {
+  local before=$(free_gb)
+  print -P "%BFree: ${before} GB.%b Each step asks first; none touches running containers or apps.\n"
+
+  if docker_up; then
+    confirm "Docker: delete build cache not used by any image?" && docker builder prune -f | tail -1
+    confirm "Docker: delete dangling (untagged) images?" && docker image prune -f | tail -1
+    print -P "%F{8}(Unused but tagged images: 'docker image prune -a' frees more, but they'd be re-downloaded when needed.)%f"
+  fi
+  (( $+commands[brew] )) && confirm "Homebrew: delete old versions and download cache ($(size_of ~/Library/Caches/Homebrew))?" &&
+    brew cleanup --prune=all 2>&1 | tail -1
+  [[ -d ~/.npm/_cacache ]] && confirm "npm: clear download cache ($(size_of ~/.npm/_cacache))?" &&
+    npm cache clean --force 2>/dev/null
+  (( $+commands[uv] )) && [[ -d ~/.cache/uv ]] && confirm "uv: remove unused cache entries ($(size_of ~/.cache/uv))?" &&
+    uv cache prune 2>&1 | tail -1
+  (( $+commands[pnpm] )) && confirm "pnpm: remove unreferenced packages from the store?" &&
+    pnpm store prune 2>&1 | tail -1
+  local d
+  for d in ~/Library/Caches/com.microsoft.VSCode.ShipIt ~/Library/Caches/notion.id.ShipIt ~/Library/Caches/notion-updater; do
+    [[ -d $d ]] && confirm "Delete leftover app-update downloads ${d:t} ($(size_of $d))?" &&
+      command rm -rf "$d"
+  done
+
+  local after=$(free_gb)
+  print -P "\n%BFree: ${before} → ${after} GB.%b"
+  print -P "%F{8}Docker frees its disk image gradually; check again in a few minutes.%f"
+  print -P "%F{8}Swap ($(swap_gb) GB) shrinks only when memory frees up: quit the big users listed by 'diskspace'.%f"
+}
+
+notify() {
+  osascript -e "display notification \"$2\" with title \"$1\" sound name \"Funk\"" 2>/dev/null
+}
+
+watch() {
+  local free=$(free_gb) level state=~/.cache/diskspace/last-alert now=$(date +%s)
+  if (( free < CRIT_GB )); then level=crit
+  elif (( free < WARN_GB )); then level=warn
+  else command rm -f $state; return
+  fi
+  mkdir -p ${state:h}
+  # Repeat at most every 30 min per level; escalate immediately.
+  local last_level last_time
+  [[ -f $state ]] && read last_level last_time < $state
+  [[ $last_level == $level ]] && (( now - last_time < 1800 )) && return
+  print "$level $now" >| $state
+  if [[ $level == crit ]]; then
+    notify "Disk almost full: ${free} GB left" "Swap: $(swap_gb) GB. Quit big apps or stop Docker containers, then run diskspace clean."
+  else
+    notify "Disk space low: ${free} GB left" "Swap: $(swap_gb) GB. Run 'diskspace' in a terminal to see what's using it."
+  fi
+}
+
+case ${1:-report} in
+  report) report ;;
+  clean)  clean ;;
+  watch)  watch ;;
+  *) print -u2 "usage: diskspace [report|clean|watch]"; exit 2 ;;
+esac

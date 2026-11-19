@@ -1,0 +1,8 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/sh
+# (Re)load the low-disk-space notifier when its plist changes.
+# plist hash: {{ include "private_Library/LaunchAgents/local.diskspace-watch.plist.tmpl" | sha256sum }}
+plist="$HOME/Library/LaunchAgents/local.diskspace-watch.plist"
+launchctl bootout "gui/$(id -u)/local.diskspace-watch" 2>/dev/null
+launchctl bootstrap "gui/$(id -u)" "$plist"
+{{ end -}}
